@@ -1,0 +1,20 @@
+{
+  "maven.terminal.customEnv": [
+    {
+      "environmentVariable": "SECRET_KEY",
+      "value": "2ph"
+    },
+    {
+      "environmentVariable": "DEBUG",
+      "value": "False"
+    },
+    {
+      "environmentVariable": "ALLOWED_HOSTS",
+      "value": "*.up.railway.app,localhost"
+    },
+    {
+      "environmentVariable": "DATABASE_URL",
+      "value": "mysql://utilisateur:motdepasse@host:port/nomdelabase"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %}
+{% block title %}Confirmer suppression{% endblock %}
+{% block content %}
+<h2>Supprimer le client {{ client.name }}</h2>
+<form method="post">
+  {% csrf_token %}
+  <p>Êtes-vous sûr de vouloir supprimer ce client ? Cette action est irréversible.</p>
+  <button type="submit" class="btn btn-danger">Supprimer</button>
+  <a href="{% url 'client_list' %}" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock %}

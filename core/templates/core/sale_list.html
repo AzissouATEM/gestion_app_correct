@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+{% block title %}Liste des ventes{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary">Liste des ventes</h2>
+    <a href="{% url 'sale_create' %}" class="btn btn-success">
+      <i class="bi bi-plus-lg"></i> Ajouter une vente
+    </a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover table-striped border rounded shadow-sm">
+      <thead class="table-light">
+        <tr>
+          <th>Client</th>
+          <th>Date</th>
+          <th>Total (Fcfa)</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sale in sales %}
+        <tr>
+          <td>{{ sale.client.name }}</td>
+          <td>{{ sale.date|date:"d/m/Y H:i" }}</td>
+          <td>{{ sale.total }}</td>
+          <td>
+            <a href="{% url 'sale_detail' sale.pk %}" class="btn btn-sm btn-outline-primary">
+              <i class="bi bi-eye"></i> Détails
+            </a>
+            <a href="{% url 'sale_delete' sale.pk %}" class="btn btn-sm btn-outline-danger">
+              <i class="bi bi-trash"></i> Supprimer
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-center text-muted">Aucune vente trouvée.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

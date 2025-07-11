@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Facture Vente #{{ sale.id }}</h1>
+    <p><strong>Date :</strong> {{ sale.date|date:"d/m/Y H:i" }}</p>
+    <p><strong>Client :</strong> {{ sale.client.name }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in sale.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unit_price }} FCFA</td>
+                <td>{{ item.quantity|floatformat:2|add:item.unit_price|floatformat:2 }} FCFA</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" style="text-align: right;"><strong>Total :</strong></td>
+                <td><strong>{{ sale.total }} FCFA</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

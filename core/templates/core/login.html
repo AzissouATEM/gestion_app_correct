@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow p-4 fade-in" style="width: 100%; max-width: 400px;">
+    <h3 class="text-center text-primary mb-4">Connexion</h3>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="username" class="form-label">Nom d'utilisateur</label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          class="form-control"
+          placeholder="Entrez votre nom d'utilisateur"
+          required
+          autofocus
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Mot de passe</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="form-control"
+          placeholder="Entrez votre mot de passe"
+          required
+          autocomplete="current-password"
+        />
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Se connecter</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

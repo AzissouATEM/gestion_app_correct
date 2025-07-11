@@ -1,0 +1,147 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<div class="container mt-5 fade-in">
+
+  <div class="row gy-4">
+
+    <!-- Section accueil texte + boutons -->
+    <section class="col-lg-8">
+      <div class="p-4 bg-white rounded-4 shadow-sm">
+        <h1 class="display-5 fw-bold text-primary mb-3">Bienvenue 👋</h1>
+        <p class="lead text-muted mb-4">
+          Gérez facilement vos <strong>employés</strong>, <strong>produits</strong>, <strong>clients</strong>, <strong>ventes</strong> et <strong>approvisionnements</strong> avec cette application intuitive.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{% url 'employee_list' %}" class="btn btn-outline-primary btn-lg rounded-pill shadow-sm d-flex align-items-center px-4">
+            <i class="bi bi-people-fill me-2 fs-5"></i> Employés
+          </a>
+          <a href="{% url 'product_list' %}" class="btn btn-outline-success btn-lg rounded-pill shadow-sm d-flex align-items-center px-4">
+            <i class="bi bi-box-seam me-2 fs-5"></i> Produits
+          </a>
+          <a href="{% url 'sale_list' %}" class="btn btn-outline-warning btn-lg rounded-pill shadow-sm d-flex align-items-center px-4">
+            <i class="bi bi-currency-exchange me-2 fs-5"></i> Ventes
+          </a>
+          <a href="{% url 'client_list' %}" class="btn btn-outline-secondary btn-lg rounded-pill shadow-sm d-flex align-items-center px-4">
+            <i class="bi bi-person-lines-fill me-2 fs-5"></i> Clients
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section statistiques totales -->
+    <section class="col-lg-4 d-flex flex-column gap-4">
+      <div class="card shadow-sm rounded-4 border-0 text-center p-4">
+        <h6 class="text-muted mb-2">Recettes totales</h6>
+        <p class="display-6 fw-bold text-success mb-0">{{ total_sales|floatformat:2 }} F</p>
+      </div>
+      <div class="card shadow-sm rounded-4 border-0 text-center p-4">
+        <h6 class="text-muted mb-2">Approvisionnements totaux</h6>
+        <p class="display-6 fw-bold text-primary mb-0">{{ total_supplies|floatformat:0 }} unités</p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Graphique -->
+  <div class="card shadow-sm rounded-4 border-0 mt-5 p-4 bg-light">
+    <h5 class="text-center text-muted mb-4">Évolution mensuelle des ventes et approvisionnements</h5>
+    <canvas id="salesChart" height="130"></canvas>
+  </div>
+
+</div>
+
+<!-- Données JSON -->
+{{ labels|json_script:"labels-data" }}
+{{ sales_data|json_script:"sales-data" }}
+{{ supply_data|json_script:"supply-data" }}
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = JSON.parse(document.getElementById('labels-data').textContent);
+  const salesData = JSON.parse(document.getElementById('sales-data').textContent);
+  const supplyData = JSON.parse(document.getElementById('supply-data').textContent);
+
+  const ctx = document.getElementById('salesChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Ventes (Fcfa)',
+          data: salesData,
+          borderColor: '#0d6efd',
+          backgroundColor: 'rgba(13, 110, 253, 0.15)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Approvisionnements (unités)',
+          data: supplyData,
+          borderColor: '#198754',
+          backgroundColor: 'rgba(25, 135, 84, 0.15)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          yAxisID: 'y1',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            font: { size: 14, weight: '600' }
+          }
+        },
+        tooltip: {
+          enabled: true,
+          mode: 'index',
+          intersect: false,
+          bodyFont: { weight: '600' }
+        }
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          position: 'left',
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Montant (Fcfa)',
+            font: { weight: '600' }
+          },
+          ticks: { font: { size: 13 } }
+        },
+        y1: {
+          type: 'linear',
+          position: 'right',
+          beginAtZero: true,
+          grid: { drawOnChartArea: false },
+          title: {
+            display: true,
+            text: 'Quantité',
+            font: { weight: '600' }
+          },
+          ticks: { font: { size: 13 } }
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock %}
